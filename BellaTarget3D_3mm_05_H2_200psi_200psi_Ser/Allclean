@@ -1,0 +1,25 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial clean functions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+# Remove surface and features, leave only the .obj file
+#rm -f constant/triSurface/geometry.obj > /dev/null 2>&1
+rm -rf constant/extendedFeatureEdgeMesh > /dev/null 2>&1
+rm -f constant/triSurface/*.gz > /dev/null 2>&1
+rm -f constant/triSurface/*.stl > /dev/null 2>&1
+
+rm -f constant/polyMesh/*.gz > /dev/null 2>&1
+rm -f constant/polyMesh/boundary > /dev/null 2>&1
+
+cp constant/triSurface/OriginalGeometry/capillary.stl constant/triSurface/capillary.stl 
+cp constant/triSurface/OriginalGeometry/inlet_1.stl constant/triSurface/inlet_1.stl 
+cp constant/triSurface/OriginalGeometry/inlet_2.stl constant/triSurface/inlet_2.stl 
+cp constant/triSurface/OriginalGeometry/vacuum.stl constant/triSurface/vacuum.stl 
+
+cleanCase
+rm -rf 0
+cp -r 0.orig 0
+
+#------------------------------------------------------------------------------

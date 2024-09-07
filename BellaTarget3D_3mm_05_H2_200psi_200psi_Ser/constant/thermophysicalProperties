@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+thermoType
+{
+    type            hePsiThermo;
+    mixture         pureMixture;
+    transport       sutherland;
+    thermo          eConst;
+    equationOfState perfectGas;
+    specie          specie;
+    energy          sensibleInternalEnergy;
+
+}
+
+mixture
+{
+    // normalised gas
+    specie
+    {
+        /* H2 */
+		nMoles          1;
+		molWeight 		2.01588;  //molecular weight of gas H2
+    }
+    thermodynamics
+    {
+        /* H2 */
+		Cv 14290; //heat capacity [J/kg K]
+		Hf 0; 
+    }
+    transport
+    {
+        /* H2 */
+		As              8.586e-07; // mu = As*(T)^1.5 / (T+Ts)
+        Ts              273;
+		//mu 1.8e-05; //dynamic viscosity
+		Pr 0.69; //0.8; //Prandtl number for H2
+    }
+}
+
+
+// ************************************************************************* //

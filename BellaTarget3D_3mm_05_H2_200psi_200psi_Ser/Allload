@@ -1,0 +1,45 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+#before run save the "capillary" surfaces in .stl
+#before run save the "vacuum" surfaces in .stl
+#before run save the "inlet" surfaces in .stl
+#ensure that the blockMesh domain include the capillary (check in system/blockMeshDict)
+runApplication blockMesh 
+
+mv constant/triSurface/capillary.stl constant/triSurface/capillaryTemp.stl 
+mv constant/triSurface/vacuum.stl constant/triSurface/vacuumTemp.stl 
+mv constant/triSurface/inlet_1.stl constant/triSurface/inlet_1Temp.stl 
+mv constant/triSurface/inlet_2.stl constant/triSurface/inlet_2Temp.stl 
+
+# FAI SEMPRE I DISEGNI IN METRI, POI SCALI DI 1E-6 altrimenti non carica bene le immagini .stl
+surfaceTransformPoints -scale '(1e-3 1e-3 1e-3)' constant/triSurface/capillaryTemp.stl constant/triSurface/capillary.stl #for a uniform [um] to [m] scaling
+surfaceTransformPoints -scale '(1e-3 1e-3 1e-3)' constant/triSurface/inlet_1Temp.stl constant/triSurface/inlet_1.stl
+surfaceTransformPoints -scale '(1e-3 1e-3 1e-3)' constant/triSurface/inlet_2Temp.stl constant/triSurface/inlet_2.stl
+surfaceTransformPoints -scale '(1e-3 1e-3 1e-3)' constant/triSurface/vacuumTemp.stl constant/triSurface/vacuum.stl
+
+rm -f constant/triSurface/capillaryTemp.stl
+rm -f constant/triSurface/vacuumTemp.stl 
+rm -f constant/triSurface/inlet_1Temp.stl
+rm -f constant/triSurface/inlet_2Temp.stl
+
+surfaceFeatureExtract 
+# surfaceFeatures
+
+snappyHexMesh -overwrite 
+runApplication renumberMesh -overwrite
+runApplication checkMesh
+
+echo
+echo "!!! check if the file is correctly loaded!!!"
+echo
+
+
+# foamToVTK
+
+exit 1
+
+#------------------------------------------------------------------------------

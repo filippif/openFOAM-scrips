@@ -1,0 +1,86 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+|*---------------------------------------------------------------------------*|
+|* OpenFOAM for Windows 18.02 (v1)                                           *|
+|* Built by CFD Support, www.cfdsupport.com (based on Symscape).             *|
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 10;
+
+boundaryField
+{
+    inlet_1
+    {
+        type            uniformTotalPressure;
+        rho             none;
+        psi             thermo:psi;
+        gamma           1.4;
+        p0              table
+        
+8
+(
+(0 10)
+(1e-008 1000)
+(20e-008 2000)
+(40e-008 3000)
+(60e-008 4000)
+(80e-008 5000)
+(2e-006 1.379e+006) 	// 13.79 bar, 200 psi
+(3e-003 1.379e+006) 	// 13.79 bar, 200 psi
+)
+;
+        value           uniform 1;
+    }
+    inlet_2
+    {
+        type            uniformTotalPressure;
+        rho             none;
+        psi             thermo:psi;
+        gamma           1.4;
+        p0              table
+        
+8
+(
+(0 10)
+(1e-008 1000)
+(20e-008 2000)
+(40e-008 3000)
+(60e-008 4000)
+(80e-008 5000)
+(2e-006 1.379e+006) 	// 13.79 bar, 200 psi
+(3e-003 1.379e+006) 	// 13.79 bar, 200 psi
+)
+;
+        value           uniform 10;
+    }
+    vacuum
+    {
+        type            waveTransmissive;
+        gamma           1.4;
+        fieldInf        10;
+        lInf            0.5;
+        value           uniform 10;
+    }
+    capillary
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //
